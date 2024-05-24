@@ -27,9 +27,14 @@ const App = () => {
 
     return (
         <div>
+            <p style={{fontSize: "30px", fontWeight: "bold"}}>Anecdote of the day</p>
+
             <p>{anecdotes[selected]}</p>
             <button onClick={voteForCurrentAnec}>Vote</button>
             <button onClick={chooseRandomAnec}>Next anecdote</button>
+
+            <p style={{fontSize: "30px", fontWeight: "bold"}}>Anecdote with most votes</p>
+            <p>{anecdotes[votes.indexOf(Math.max(...votes))]}</p>
         </div>
     )
 }
