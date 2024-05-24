@@ -15,15 +15,30 @@ const Statistics = ({goodComents, neutralComents, badComents}) => {
   return (
       <div>
         <p>Statistics</p>
-        <p>Good = {goodComents}</p>
-        <p>Neutral = {neutralComents}</p>
-        <p>Bad = {badComents}</p>
-        <p>All = {total}</p>
-        <p>Average = {(goodComents - badComents) / total}</p>
-        <p>Positive = {goodComents / total * 100}%</p>
+        <StatisticLine text={"Good"} value={goodComents} />
+        <StatisticLine text={"Neutral"} value={neutralComents} />
+        <StatisticLine text={"Bad"} value={badComents} />
+        <StatisticLine text={"All"} value={total} />
+        <StatisticLine text={"Average"} value={(goodComents - badComents) / total} />
+        <StatisticLine text={"Positive"} value={(goodComents / total * 100) + "%"} />
       </div>
   );
 }
+
+
+const Button = ({text, clickHandler}) => {
+    return (
+        <button onClick={clickHandler}>{text}</button>
+    );
+}
+
+
+const StatisticLine = ({text, value}) => {
+    return (
+        <p>{text} = {value}</p>
+    );
+}
+
 
 function App() {
   const [goodComents, setGood] = useState(0);
@@ -39,9 +54,10 @@ function App() {
   return (
       <div>
         <p>Give Feedback!</p>
-        <button onClick={increaseValue(setGood, goodComents)}>Good</button>
-        <button onClick={increaseValue(setNeutral, neutralComents)}>Neutral</button>
-        <button onClick={increaseValue(setBad, badComents)}>Bad</button>
+
+        <Button text={"Good"} clickHandler={increaseValue(setGood, goodComents)} />
+        <Button text={"Neutral"} clickHandler={increaseValue(setNeutral, neutralComents)} />
+        <Button text={"Bad"} clickHandler={increaseValue(setBad, badComents)} />
 
         <Statistics goodComents={goodComents}
                     neutralComents={neutralComents}
