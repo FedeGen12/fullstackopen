@@ -14,13 +14,19 @@ const Statistics = ({goodComents, neutralComents, badComents}) => {
 
   return (
       <div>
-        <p>Statistics</p>
-        <StatisticLine text={"Good"} value={goodComents} />
-        <StatisticLine text={"Neutral"} value={neutralComents} />
-        <StatisticLine text={"Bad"} value={badComents} />
-        <StatisticLine text={"All"} value={total} />
-        <StatisticLine text={"Average"} value={(goodComents - badComents) / total} />
-        <StatisticLine text={"Positive"} value={(goodComents / total * 100) + "%"} />
+        <p style={{fontSize: "30px", fontWeight: "bold"}}>Statistics</p>
+
+        <table>
+          <tbody>
+          <StatisticRow text={"Statistic"} value={"Value"}/>
+          <StatisticRow text={"Good"} value={goodComents}/>
+          <StatisticRow text={"Neutral"} value={neutralComents}/>
+          <StatisticRow text={"Bad"} value={badComents}/>
+          <StatisticRow text={"All"} value={total}/>
+          <StatisticRow text={"Average"} value={(goodComents - badComents) / total}/>
+          <StatisticRow text={"Positive"} value={(goodComents / total * 100) + "%"}/>
+          </tbody>
+        </table>
       </div>
   );
 }
@@ -33,9 +39,12 @@ const Button = ({text, clickHandler}) => {
 }
 
 
-const StatisticLine = ({text, value}) => {
+const StatisticRow = ({text, value}) => {
     return (
-        <p>{text} = {value}</p>
+        <tr>
+          <td>{text}</td>
+          <td>{value}</td>
+        </tr>
     );
 }
 
