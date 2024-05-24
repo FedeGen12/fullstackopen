@@ -4,6 +4,14 @@ const Statistics = ({goodComents, neutralComents, badComents}) => {
 
   let total = goodComents + neutralComents + badComents;
 
+  if (total === 0) {
+    return (
+        <div>
+          <p>No feedback given</p>
+        </div>
+    );
+  }
+
   return (
       <div>
         <p>Statistics</p>
