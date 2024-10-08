@@ -9,12 +9,27 @@ const App = () => {
     const addPerson = (event) => {
         event.preventDefault()
 
-        const person= {
-            name: newName
+        let is_repeat = false;
+        for (const person of persons) {
+            if (person.name.toLowerCase() === newName.toLowerCase()) {
+                is_repeat = true;
+                break;
+            }
         }
 
-        setPersons(persons.concat(person))
-        setNewName('')
+        if (is_repeat) {
+            alert(`${newName} is already added to phonebook`)
+        } else {
+            const person= {
+                name: newName
+            }
+
+            setPersons(persons.concat(person))
+            setNewName('')
+        }
+
+
+
     }
 
     const handlerNameChange = (event) => {
