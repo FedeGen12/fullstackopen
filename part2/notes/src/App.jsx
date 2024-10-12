@@ -47,6 +47,13 @@ const App = () => {
             .then(returnedNote => {
                 setNotes(notes.map(note => note.id !== id ? note : returnedNote))
             })
+            // eslint-disable-next-line no-unused-vars
+            .catch(error => {
+                alert(
+                    `the note '${note.content}' was already deleted from server`
+                )
+                setNotes(notes.filter(n => n.id !== id))
+            })
     }
 
     return (
