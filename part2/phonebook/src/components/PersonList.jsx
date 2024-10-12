@@ -1,9 +1,14 @@
 import Person from "./Person.jsx";
 
-const PersonList = ({ persons }) => {
+const PersonList = ({ persons, handlerDelete }) => {
     return (
         <div>
-            {persons.map(person => <Person key={person.name} person={person} />)}
+            {persons.map(person => (
+                <div key={person.id}>
+                    <Person person={person}/>
+                    <button onClick={() => {handlerDelete(person)}}>delete</button>
+                </div>
+            ))}
         </div>
     )
 }

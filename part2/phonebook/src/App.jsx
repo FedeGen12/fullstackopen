@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons.jsx'
+import personDelete from "./components/Delete.jsx";
 import Filter from "./components/Filter.jsx";
 import PersonForm from "./components/PersonForm.jsx";
 import PersonList from "./components/PersonList.jsx";
@@ -38,7 +39,12 @@ const App = () => {
 
             <h2>Numbers</h2>
 
-            <PersonList persons={personsFilter} />
+            <PersonList persons={personsFilter}
+                        handlerDelete={(personToDelete) => (
+                            personDelete.handlerDelete(personToDelete,
+                                persons, setPersons, setPersonsFilter)
+                        )}
+            />
         </div>
     )
 }
