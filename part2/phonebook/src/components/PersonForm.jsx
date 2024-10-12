@@ -1,23 +1,37 @@
 import {useState} from "react";
 import personService from '../services/persons.jsx'
 
-const PersonForm = ({ persons, setPersons, setNewFilter, setNewPersonsFilter }) => {
+const PersonForm = ({ persons, setPersons, setNewFilter, setPersonsFilter }) => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
 
     const addPerson = (event) => {
         event.preventDefault()
 
-        for (const person of persons) {
-            if (person.name.toLowerCase() === newName.toLowerCase()) {
-                alert(`${newName} is already added to phonebook`)
-                return;
-            }
-        }
-
         const newPerson= {
             name: newName,
             number: newNumber
+        }
+
+        for (const person of persons) {
+            if (person.name.toLowerCase() === newName.toLowerCase()) {
+                const confimedUpdated = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+                if (confimedUpdated) {
+                    personService
+                        .updatePhonePerson({...newPerson, id:person.id})
+                        .then((personUpdated) => {
+                            const personsUpdated = persons.map(person => person.id !== personUpdated.id ? person : personUpdated)
+                            setPersons(personsUpdated)
+                            setPersonsFilter(personsUpdated)
+
+                            // Restart states
+                            setNewFilter('')
+                            setNewName('')
+                            setNewNumber('')
+                        })
+                }
+                return
+            }
         }
 
         personService
@@ -25,7 +39,7 @@ const PersonForm = ({ persons, setPersons, setNewFilter, setNewPersonsFilter }) 
             .then(createdPerson => {
                 const newPersons = persons.concat(createdPerson)
                 setPersons(newPersons)
-                setNewPersonsFilter(newPersons)
+                setPersonsFilter(newPersons)
 
                 // Restart states
                 setNewFilter('')

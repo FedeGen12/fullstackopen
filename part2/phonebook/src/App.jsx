@@ -34,7 +34,7 @@ const App = () => {
             <PersonForm persons={persons}
                         setPersons={setPersons}
                         setNewFilter={setFilter}
-                        setNewPersonsFilter={setPersonsFilter}
+                        setPersonsFilter={setPersonsFilter}
             />
 
             <h2>Numbers</h2>
