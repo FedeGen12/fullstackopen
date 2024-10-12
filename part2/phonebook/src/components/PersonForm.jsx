@@ -1,10 +1,9 @@
 import {useState} from "react";
-import axios from "axios";
+import personService from '../services/persons.jsx'
 
 const PersonForm = ({ persons, setPersons, setNewFilter, setNewPersonsFilter }) => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
-
 
     const addPerson = (event) => {
         event.preventDefault()
@@ -21,11 +20,10 @@ const PersonForm = ({ persons, setPersons, setNewFilter, setNewPersonsFilter }) 
             number: newNumber
         }
 
-        axios
-            .post('http://localhost:3001/persons', newPerson)
-            .then(response => {
-                const returnedPerson = response.data
-                const newPersons = persons.concat(returnedPerson)
+        personService
+            .createPerson(newPerson)
+            .then(createdPerson => {
+                const newPersons = persons.concat(createdPerson)
                 setPersons(newPersons)
                 setNewPersonsFilter(newPersons)
 
