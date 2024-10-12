@@ -1,4 +1,5 @@
 import {useState} from "react";
+import axios from "axios";
 
 const PersonForm = ({ persons, setPersons, setNewFilter, setNewPersonsFilter }) => {
     const [newName, setNewName] = useState('')
@@ -15,19 +16,24 @@ const PersonForm = ({ persons, setPersons, setNewFilter, setNewPersonsFilter }) 
             }
         }
 
-        const person= {
+        const newPerson= {
             name: newName,
             number: newNumber
         }
 
-        const newPersons = persons.concat(person)
-        setPersons(newPersons)
-        setNewPersonsFilter(newPersons)
+        axios
+            .post('http://localhost:3001/persons', newPerson)
+            .then(response => {
+                const returnedPerson = response.data
+                const newPersons = persons.concat(returnedPerson)
+                setPersons(newPersons)
+                setNewPersonsFilter(newPersons)
 
-        // Restart states
-        setNewFilter('')
-        setNewName('')
-        setNewNumber('')
+                // Restart states
+                setNewFilter('')
+                setNewName('')
+                setNewNumber('')
+            })
     }
 
 
