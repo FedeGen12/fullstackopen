@@ -1,16 +1,15 @@
-const Filter = ({ persons, setNewFilterPersons, newFilter, setNewFilter }) => {
-
+const Filter = ({ persons, setPersonsFilter, filter, setFilter }) => {
     const handlerFilterChange = (event) => {
         const currFilter = event.target.value
-        setNewFilter(currFilter)
+        setFilter(currFilter)
 
         // Check the currFilter without the spaces behind the word
         if (currFilter.trimStart().length === 0) {
-            setNewFilterPersons(persons)    // shows the original persons list
+            setPersonsFilter(persons)    // shows the original persons list
             return true;
         }
 
-        setNewFilterPersons(persons.filter(person => {
+        setPersonsFilter(persons.filter(person => {
             const words = person.name.split(' ').map(word => word.toLowerCase())
 
             let matchesFilter = false
@@ -21,7 +20,7 @@ const Filter = ({ persons, setNewFilterPersons, newFilter, setNewFilter }) => {
 
     return (
         <div>
-            filter shown with name or surname: <input value={newFilter}
+            filter shown with name or surname: <input value={filter}
                                                       onChange={handlerFilterChange} />
         </div>
     )

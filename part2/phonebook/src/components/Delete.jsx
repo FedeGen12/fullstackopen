@@ -1,20 +1,19 @@
 import personService from '../services/persons.jsx'
 
-const handlerDelete = (personToDelete,
-                       persons,
-                       setPersons,
-                       setPersonsFilter,
-                       reloadList) => {
+const timeout = 5000
+
+const handlerDelete = (persons, personToDelete, updatePersons, showMessage) => {
     const confirmedDeletion = window.confirm(`Delete ${personToDelete.name}?`)
     if (confirmedDeletion) {
         personService
             .deletePerson(personToDelete.id)
             .then(personDeleted => {
                 const filteredPersons = persons.filter(person => person.id !== personDeleted.id)
-                setPersons(filteredPersons)
-                setPersonsFilter(filteredPersons)
+                updatePersons(filteredPersons)
             })
-        reloadList()
+            .catch(() => {
+                showMessage(`Information of ${personToDelete.name} has already been removed from server`, "error", timeout)
+            })
     }
 }
 

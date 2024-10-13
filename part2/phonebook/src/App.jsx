@@ -1,29 +1,39 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons.jsx'
-import personDelete from "./components/Delete.jsx";
+import deletionService from "./components/Delete.jsx";
 import Filter from "./components/Filter.jsx";
 import PersonForm from "./components/PersonForm.jsx";
 import PersonList from "./components/PersonList.jsx";
 import Notification from "./components/Notification.jsx";
 
+
 const App = () => {
     const [persons, setPersons] = useState([])
     const [personsFilter, setPersonsFilter] = useState([])
-    const [newFilter, setFilter] = useState('')
+    const [filter, setFilter] = useState('')
     const [message, setMessage] = useState(null)
-    const [typeMessage, setTypeMessage] = useState("sucess")
+    const [typeMessage, setTypeMessage] = useState('')
 
-    const hook = () => {
+    const updatePersons = (newPersons) => {
+        setPersons(newPersons)
+        setPersonsFilter(newPersons)
+        setFilter('')   // Restart filter
+    }
+
+    const showMessage = (message, typeMessage, timeout) => {
+        setMessage(message)
+        setTypeMessage(typeMessage)
+        setTimeout(() => {setMessage(null)}, timeout)
+    }
+
+    useEffect(() => {
         personService
             .getAllPersons()
             .then(initalPersons => {
-                setPersons(initalPersons)
-                setPersonsFilter(initalPersons)
+                updatePersons(initalPersons)
                 return initalPersons
             })
-    }
-
-    useEffect(hook, []);
+    }, []);
 
     return (
         <div>
@@ -34,28 +44,23 @@ const App = () => {
             />
 
             <Filter persons={persons}
-                    setNewFilterPersons={setPersonsFilter}
-                    newFilter={newFilter}
-                    setNewFilter={setFilter}
+                    setPersonsFilter={setPersonsFilter}
+                    filter={filter}
+                    setFilter={setFilter}
             />
 
             <h2>Add a new</h2>
 
             <PersonForm persons={persons}
-                        setPersons={setPersons}
-                        setNewFilter={setFilter}
-                        setPersonsFilter={setPersonsFilter}
-                        setMessage={setMessage}
-                        setTypeMessage={setTypeMessage}
-                        reloadList={hook}
+                        updatePersons={updatePersons}
+                        showMessage={showMessage}
             />
 
             <h2>Numbers</h2>
 
             <PersonList persons={personsFilter}
                         handlerDelete={(personToDelete) => (
-                            personDelete.handlerDelete(personToDelete,
-                                persons, setPersons, setPersonsFilter, hook)
+                            deletionService.handlerDelete(persons, personToDelete, updatePersons, showMessage)
                         )}
             />
         </div>

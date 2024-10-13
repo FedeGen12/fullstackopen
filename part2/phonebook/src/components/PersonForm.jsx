@@ -1,15 +1,17 @@
 import {useState} from "react";
 import personService from '../services/persons.jsx'
 
-const PersonForm = ({ persons,
-                      setPersons,
-                      setNewFilter,
-                      setPersonsFilter,
-                      setMessage,
-                      setTypeMessage,
-                      reloadList }) => {
+const timeout = 5000
+
+const PersonForm = ({ persons, updatePersons, showMessage }) => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
+
+    const updateState = (personsUpdated) => {
+        updatePersons(personsUpdated)
+        setNewName('')
+        setNewNumber('')
+    }
 
     const addPerson = (event) => {
         event.preventDefault()
@@ -29,26 +31,11 @@ const PersonForm = ({ persons,
                         .updatePhonePerson({...newPerson, id:person.id})
                         .then((personUpdated) => {
                             const personsUpdated = persons.map(person => person.id !== personUpdated.id ? person : personUpdated)
-                            setPersons(personsUpdated)
-                            setPersonsFilter(personsUpdated)
-
-                            // Restart states
-                            setNewFilter('')
-                            setNewName('')
-                            setNewNumber('')
-
-                            // Show message
-                            setMessage(`Updated ${personUpdated.name}`)
-                            setTypeMessage("success")
-                            setTimeout(() => {setMessage(null)}, 5000)
-                            reloadList()
+                            updateState(personsUpdated)
+                            showMessage(`Updated ${personUpdated.name}`, "success", timeout)
                         })
                         .catch(() => {
-                            // Show message
-                            setMessage(`Information of ${newNameFormatted} has already been removed from server`)
-                            setTypeMessage("error")
-                            setTimeout(() => {setMessage(null)}, 5000)
-                            reloadList()
+                            showMessage(`Information of ${newNameFormatted} has already been removed from server`, "error", timeout)
                         })
                 }
                 return
@@ -58,20 +45,8 @@ const PersonForm = ({ persons,
         personService
             .createPerson(newPerson)
             .then(createdPerson => {
-                const newPersons = persons.concat(createdPerson)
-                setPersons(newPersons)
-                setPersonsFilter(newPersons)
-
-                // Restart states
-                setNewFilter('')
-                setNewName('')
-                setNewNumber('')
-
-                // Show message
-                setMessage(`Added ${createdPerson.name}`)
-                setTypeMessage("success")
-                setTimeout(() => {setMessage(null)}, 5000)
-                reloadList()
+                updateState(persons.concat(createdPerson))
+                showMessage(`Added ${createdPerson.name}`, "success", timeout)
             })
     }
 
