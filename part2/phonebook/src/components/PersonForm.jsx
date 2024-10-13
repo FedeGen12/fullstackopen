@@ -1,21 +1,28 @@
 import {useState} from "react";
 import personService from '../services/persons.jsx'
 
-const PersonForm = ({ persons, setPersons, setNewFilter, setPersonsFilter }) => {
+const PersonForm = ({ persons,
+                      setPersons,
+                      setNewFilter,
+                      setPersonsFilter,
+                      setMessage,
+                      setTypeMessage }) => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
 
     const addPerson = (event) => {
         event.preventDefault()
 
+        let newNameFormatted = newName.trim()
+
         const newPerson= {
-            name: newName,
+            name: newNameFormatted,
             number: newNumber
         }
 
         for (const person of persons) {
-            if (person.name.toLowerCase() === newName.toLowerCase()) {
-                const confimedUpdated = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+            if (person.name.toLowerCase() === newNameFormatted.toLowerCase()) {
+                const confimedUpdated = window.confirm(`${newNameFormatted} is already added to phonebook, replace the old number with a new one?`)
                 if (confimedUpdated) {
                     personService
                         .updatePhonePerson({...newPerson, id:person.id})
@@ -28,6 +35,11 @@ const PersonForm = ({ persons, setPersons, setNewFilter, setPersonsFilter }) => 
                             setNewFilter('')
                             setNewName('')
                             setNewNumber('')
+
+                            // Show message
+                            setMessage(`Updated ${personUpdated.name}`)
+                            setTypeMessage("success")
+                            setTimeout(() => {setMessage(null)}, 5000)
                         })
                 }
                 return
@@ -45,6 +57,11 @@ const PersonForm = ({ persons, setPersons, setNewFilter, setPersonsFilter }) => 
                 setNewFilter('')
                 setNewName('')
                 setNewNumber('')
+
+                // Show message
+                setMessage(`Added ${createdPerson.name}`)
+                setTypeMessage("success")
+                setTimeout(() => {setMessage(null)}, 5000)
             })
     }
 

@@ -4,11 +4,14 @@ import personDelete from "./components/Delete.jsx";
 import Filter from "./components/Filter.jsx";
 import PersonForm from "./components/PersonForm.jsx";
 import PersonList from "./components/PersonList.jsx";
+import Notification from "./components/Notification.jsx";
 
 const App = () => {
     const [persons, setPersons] = useState([])
     const [personsFilter, setPersonsFilter] = useState([])
     const [newFilter, setFilter] = useState('')
+    const [message, setMessage] = useState(null)
+    const [typeMessage, setTypeMessage] = useState("sucess")
 
     useEffect(() => {
         personService
@@ -23,6 +26,10 @@ const App = () => {
         <div>
             <h2>Phonebook</h2>
 
+            <Notification message={message}
+                          typeMessage={typeMessage}
+            />
+
             <Filter persons={persons}
                     setNewFilterPersons={setPersonsFilter}
                     newFilter={newFilter}
@@ -35,6 +42,8 @@ const App = () => {
                         setPersons={setPersons}
                         setNewFilter={setFilter}
                         setPersonsFilter={setPersonsFilter}
+                        setMessage={setMessage}
+                        setTypeMessage={setTypeMessage}
             />
 
             <h2>Numbers</h2>
