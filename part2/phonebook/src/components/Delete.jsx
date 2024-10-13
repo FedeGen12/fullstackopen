@@ -1,6 +1,10 @@
 import personService from '../services/persons.jsx'
 
-const handlerDelete = (personToDelete, persons, setPersons, setPersonsFilter) => {
+const handlerDelete = (personToDelete,
+                       persons,
+                       setPersons,
+                       setPersonsFilter,
+                       reloadList) => {
     const confirmedDeletion = window.confirm(`Delete ${personToDelete.name}?`)
     if (confirmedDeletion) {
         personService
@@ -10,6 +14,7 @@ const handlerDelete = (personToDelete, persons, setPersons, setPersonsFilter) =>
                 setPersons(filteredPersons)
                 setPersonsFilter(filteredPersons)
             })
+        reloadList()
     }
 }
 

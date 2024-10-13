@@ -6,7 +6,8 @@ const PersonForm = ({ persons,
                       setNewFilter,
                       setPersonsFilter,
                       setMessage,
-                      setTypeMessage }) => {
+                      setTypeMessage,
+                      reloadList }) => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
 
@@ -40,6 +41,14 @@ const PersonForm = ({ persons,
                             setMessage(`Updated ${personUpdated.name}`)
                             setTypeMessage("success")
                             setTimeout(() => {setMessage(null)}, 5000)
+                            reloadList()
+                        })
+                        .catch(() => {
+                            // Show message
+                            setMessage(`Information of ${newNameFormatted} has already been removed from server`)
+                            setTypeMessage("error")
+                            setTimeout(() => {setMessage(null)}, 5000)
+                            reloadList()
                         })
                 }
                 return
@@ -62,6 +71,7 @@ const PersonForm = ({ persons,
                 setMessage(`Added ${createdPerson.name}`)
                 setTypeMessage("success")
                 setTimeout(() => {setMessage(null)}, 5000)
+                reloadList()
             })
     }
 

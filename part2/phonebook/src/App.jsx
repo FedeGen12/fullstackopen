@@ -13,21 +13,24 @@ const App = () => {
     const [message, setMessage] = useState(null)
     const [typeMessage, setTypeMessage] = useState("sucess")
 
-    useEffect(() => {
+    const hook = () => {
         personService
             .getAllPersons()
             .then(initalPersons => {
                 setPersons(initalPersons)
                 setPersonsFilter(initalPersons)
+                return initalPersons
             })
-    }, []);
+    }
+
+    useEffect(hook, []);
 
     return (
         <div>
             <h2>Phonebook</h2>
 
             <Notification message={message}
-                          typeMessage={typeMessage}
+                          typeMessage={typeMessage.concat(" message")}
             />
 
             <Filter persons={persons}
@@ -44,6 +47,7 @@ const App = () => {
                         setPersonsFilter={setPersonsFilter}
                         setMessage={setMessage}
                         setTypeMessage={setTypeMessage}
+                        reloadList={hook}
             />
 
             <h2>Numbers</h2>
@@ -51,7 +55,7 @@ const App = () => {
             <PersonList persons={personsFilter}
                         handlerDelete={(personToDelete) => (
                             personDelete.handlerDelete(personToDelete,
-                                persons, setPersons, setPersonsFilter)
+                                persons, setPersons, setPersonsFilter, hook)
                         )}
             />
         </div>
