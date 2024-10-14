@@ -1,36 +1,59 @@
-const CountriesList = ({ countries }) => {
+import CountryEntry from "./CountryEntry.jsx";
+import {useState} from "react";
+
+const CountriesList = ({ countries, stateCountries, setStateCountries }) => {
+    const [infoCountries, setInfoCountries] = useState({});
+
     if (countries == null) {
-        return null
+        return null;
     }
 
     if (countries.length === 1) {
-        const country = countries[0]
-
-        return (
-            <div>
-                <h1>{country.name.common}</h1>
-
-                <p>Capital: {country.capital}</p>
-                <p>Area: {country.area}</p>
-
-                <h2>Languages</h2>
-                <ul>
-                    {Object.keys(country.languages).map(
-                        language => <li key={language}>{country.languages[language]}</li>
-                    )}
-                </ul>
-
-                <img className="imgFlag" src={country.flags["svg"]} alt={country.flags["alt"]} />
-
-            </div>
-        )
+        return (<CountryEntry country={countries[0].data} />)
     }
+
+    const handlerClickShow = (currCountry) => {
+        const countryName = currCountry.data.name.common
+
+        const countryObj = stateCountries[countryName]
+
+        let newCountryObj = { ...currCountry, showed: !currCountry.showed };
+        if (countryObj !== undefined) {
+            newCountryObj = { ...countryObj, showed: !countryObj.showed };
+        }
+
+        const newCountriesToShow = { ...stateCountries };
+        newCountriesToShow[countryName] = newCountryObj;
+        setStateCountries(newCountriesToShow)
+
+        const newInfoCountries = { ...infoCountries };
+        if (newCountryObj.showed) {
+            newInfoCountries[countryName] = <CountryEntry country={currCountry.data} />;
+        } else {
+            delete newInfoCountries[countryName];
+        }
+        setInfoCountries(newInfoCountries);
+    };
 
     return (
         <div>
-            {countries.map(country => <p key={country.name.common}>{country.name.common}</p>)}
-        </div>
-    )
-}
+            {countries.map(country => {
+                const countryName = country.data.name.common
 
-export default CountriesList
+                return (
+                    <div key={countryName}>
+                        <p className="countryName">{countryName}</p>
+
+                        <button onClick={() => { handlerClickShow(country) }}>
+                            {stateCountries[countryName].showed ? "unshow" : "show"}
+                        </button>
+
+                        {infoCountries[countryName]} {/* Render the React element */}
+                    </div>
+                )
+            })}
+        </div>
+    );
+};
+
+export default CountriesList;

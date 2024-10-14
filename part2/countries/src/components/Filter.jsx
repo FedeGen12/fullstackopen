@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-const Filter = ({ countries, setFilteredCountries }) => {
+const Filter = ({ countries, setFilteredCountries, setStateCountries }) => {
     const [filter, setFilter] = useState('')
     const [message, setMessage] = useState(null)
 
@@ -10,16 +10,23 @@ const Filter = ({ countries, setFilteredCountries }) => {
 
         if (countries == null) { return; }
 
-        let filteredCountries = countries.filter(country => country.name.common.toLowerCase().includes(currFilter.toLowerCase()))
+        let filteredCountries = countries.filter(country => country.data.name.common.toLowerCase().includes(currFilter.toLowerCase()))
         let message = null
+        let newStateCountries = {};
 
         if (filteredCountries.length > 10) {
             message = "Too many matches, specify another filter"
             filteredCountries = null
+        } else {
+            newStateCountries = filteredCountries.reduce((diccAccum, country) => {
+                diccAccum[country.data.name.common] = country;
+                return diccAccum;
+            }, {});
         }
 
         setFilteredCountries(filteredCountries)
         setMessage(message)
+        setStateCountries(newStateCountries)
     }
 
     return (
