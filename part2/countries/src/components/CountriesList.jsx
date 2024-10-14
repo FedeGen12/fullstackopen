@@ -1,5 +1,6 @@
 import CountryEntry from "./CountryEntry.jsx";
 import {useState} from "react";
+import SingleCountryEntry from "./SingleCountryEntry.jsx";
 
 const CountriesList = ({ countries, stateCountries, setStateCountries }) => {
     const [infoCountries, setInfoCountries] = useState({});
@@ -9,7 +10,7 @@ const CountriesList = ({ countries, stateCountries, setStateCountries }) => {
     }
 
     if (countries.length === 1) {
-        return (<CountryEntry country={countries[0].data} />)
+        return (<SingleCountryEntry country={countries[0].data} />)
     }
 
     const handlerClickShow = (currCountry) => {
