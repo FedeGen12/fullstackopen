@@ -28,3 +28,4 @@ yarn-error.log*
 /package.json
 /package-lock.json
 /part3/node_modules/
+/part3/.env
