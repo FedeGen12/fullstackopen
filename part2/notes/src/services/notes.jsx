@@ -3,7 +3,9 @@ const baseUrl = '/api/notes'
 
 const getAll = () => {
     const request = axios.get(baseUrl)
-    return request.then(response => response.data)
+    return request.then(response => {
+        return response.headers['content-type'] === 'application/json' ? response.data : [];
+    })
 }
 
 const create = newObject => {
