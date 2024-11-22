@@ -2,9 +2,7 @@ const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
-const bcrypt = require('bcrypt')
 const Note = require('../models/note')
-const User = require('../models/user')
 const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
@@ -68,10 +66,17 @@ describe('when there is initially some notes saved', () => {
     })
 
     describe('addition of a new note', () => {
+        let user;
+
+        beforeEach(async () => {
+            user = await helper.initializeUser();
+        })
+
         test('succeeds with valid data', async () => {
             const newNote = {
                 content: 'async/await simplifies making async calls',
                 important: true,
+                user: user.id
             }
 
             await api
@@ -89,7 +94,8 @@ describe('when there is initially some notes saved', () => {
 
         test('fails with status code 400 if data invalid', async () => {
             const newNote = {
-                important: true
+                important: true,
+                user: user.id
             }
 
             await api
@@ -125,12 +131,7 @@ describe('when there is initially some notes saved', () => {
 
 describe('when there is initially one user in db', () => {
     beforeEach(async () => {
-        await User.deleteMany({})
-
-        const passwordHash = await bcrypt.hash('BOCAAAAAAA', 10)
-        const user = new User({ username: 'root', passwordHash })
-
-        await user.save()
+        await helper.initializeUser()
     })
 
     test('creation succeeds with a fresh username', async () => {
