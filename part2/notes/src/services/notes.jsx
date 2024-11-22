@@ -4,6 +4,7 @@ const baseUrl = '/api/notes'
 const getAll = () => {
     const request = axios.get(baseUrl)
     return request.then(response => {
+        // TODO: Usar regex
         return response.headers['content-type'].includes('application/json') ? response.data : [];
     })
 }
