@@ -66,10 +66,11 @@ describe('when there is initially some notes saved', () => {
     })
 
     describe('addition of a new note', () => {
-        let user;
+        let user, token;
 
         beforeEach(async () => {
             user = await helper.initializeUser();
+            token = helper.getTokenUser(user);
         })
 
         test('succeeds with valid data', async () => {
@@ -81,6 +82,7 @@ describe('when there is initially some notes saved', () => {
 
             await api
                 .post('/api/notes')
+                .set('Authorization', `Bearer ${token}`)
                 .send(newNote)
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
@@ -100,6 +102,7 @@ describe('when there is initially some notes saved', () => {
 
             await api
                 .post('/api/notes')
+                .set('Authorization', `Bearer ${token}`)
                 .send(newNote)
                 .expect(400)
 

@@ -1,6 +1,7 @@
 const Note = require('../models/note')
 const User = require('../models/user')
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken')
 
 const initialNotes = [
     {
@@ -41,10 +42,24 @@ const initializeUser = async () => {
     return user;
 }
 
+const getTokenUser = (user) => {
+    const userForToken = {
+        username: user.username,
+        id: user._id,
+    }
+
+    return jwt.sign(
+        userForToken,
+        process.env.SECRET,
+        { expiresIn: 10 }  // expires in 10 seconds
+    )
+}
+
 module.exports = {
     initialNotes,
     nonExistingId,
     notesInDb,
     usersInDb,
     initializeUser,
+    getTokenUser
 }
