@@ -1,7 +1,11 @@
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-    username: String,
+    username: {
+        type: String,
+        required: true,
+        unique: true    // this ensures the uniqueness of username
+    },
     name: String,
     passwordHash: String,
     notes: [
@@ -17,8 +21,7 @@ userSchema.set('toJSON', {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
         delete returnedObject.__v
-        // el passwordHash no debe mostrarse
-        delete returnedObject.passwordHash
+        delete returnedObject.passwordHash      // the passwordHash should not be displayed
     }
 })
 
