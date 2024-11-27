@@ -28,7 +28,7 @@ yarn-error.log*
 /package.json
 /package-lock.json
 /part3/node_modules/
-/part3/.env
+/part3_4/.env
 /part3_4/node_modules/.bin/acorn
 /part3_4/node_modules/.bin/acorn.cmd
 /part3_4/node_modules/.bin/acorn.ps1
@@ -3714,3 +3714,4 @@ yarn-error.log*
 /part3_4/node_modules/yocto-queue/package.json
 /part3_4/node_modules/yocto-queue/readme.md
 /part3_4/node_modules/.package-lock.json
+/part3_4/node_modules/
