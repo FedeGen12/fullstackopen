@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react'
 import Note from './components/Note'
 import Notification from './components/Notification.jsx'
-import noteService from './services/notes'
+import noteService from './services/notes.js'
+import loginService from './services/login'
 
 const App = () => {
     const [notes, setNotes] = useState([])
     const [newNote, setNewNote] = useState('')
     const [showAll, setShowAll] = useState(true)
     const [errorMessage, setErrorMessage] = useState(null)
+
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
 
     useEffect(() => {
         noteService
@@ -60,10 +64,50 @@ const App = () => {
             })
     }
 
+    const [user, setUser] = useState(null)
+
+    const handleLogin = async (event) => {
+        event.preventDefault()
+
+        try {
+            const user = await loginService.login({ username, password, })
+            setUser(user)
+            setUsername('')
+            setPassword('')
+        } catch (exception) {
+            setErrorMessage('Wrong credentials')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 5000)
+        }
+    }
+
     return (
         <div>
             <h1>Notes</h1>
             <Notification message={errorMessage} className='error'/>
+
+            <form onSubmit={handleLogin}>
+                <div>
+                    username
+                    <input
+                        type="text"
+                        value={username}
+                        name="Username"
+                        onChange={({target}) => setUsername(target.value)}
+                    />
+                </div>
+                <div>
+                    password
+                    <input
+                        type="password"
+                        value={password}
+                        name="Password"
+                        onChange={({target}) => setPassword(target.value)}
+                    />
+                </div>
+                <button type="submit">login</button>
+            </form>
 
             <div>
                 <button onClick={() => setShowAll(!showAll)}>
