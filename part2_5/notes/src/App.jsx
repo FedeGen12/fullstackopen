@@ -63,11 +63,11 @@ const App = () => {
     return (
         <div>
             <h1>Notes</h1>
-            <Notification message={errorMessage} className='error' />
+            <Notification message={errorMessage} className='error'/>
 
             <div>
                 <button onClick={() => setShowAll(!showAll)}>
-                    show {showAll ? 'important' : 'all' }
+                    show {showAll ? 'important' : 'all'}
                 </button>
             </div>
             <ul>
