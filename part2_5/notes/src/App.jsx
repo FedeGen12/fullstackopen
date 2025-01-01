@@ -9,6 +9,8 @@ const App = () => {
     const [notes, setNotes] = useState([])
     const [showAll, setShowAll] = useState(true)
     const [errorMessage, setErrorMessage] = useState(null)
+    const [user, setUser] = useState(null)
+    const [loginVisible, setLoginVisible] = useState(false)
 
     useEffect(() => {
         noteService
@@ -51,7 +53,25 @@ const App = () => {
             })
     }
 
-    const [user, setUser] = useState(null)
+    const loginForm = () => {
+        const hide = { display: loginVisible ? 'none' : '' }
+        const show = { display: loginVisible ? '' : 'none' }
+
+        return (
+            <div>
+                <div style={hide}>
+                    <button onClick={() => setLoginVisible(true)}>log in</button>
+                </div>
+                <div style={show}>
+                    <LoginForm
+                        setUser={setUser}
+                        setErrorMessage={setErrorMessage}
+                    />
+                    <button onClick={() => setLoginVisible(false)}>cancel</button>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div>
@@ -59,7 +79,7 @@ const App = () => {
             <Notification message={errorMessage} className='error'/>
 
             {user === null ?
-                <LoginForm setUser={setUser} setErrorMessage={setErrorMessage} /> :
+                loginForm() :
                 <div>
                     <p>{user.name} logged-in</p>
                     {<NoteForm notes={notes} setNotes={setNotes} />}
