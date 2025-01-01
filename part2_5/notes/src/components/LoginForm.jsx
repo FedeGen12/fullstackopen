@@ -1,8 +1,7 @@
 import loginService from "../services/login.js";
-import noteService from "../services/notes.js";
 import {useState} from "react";
 
-const LoginForm = ({setUser, setErrorMessage}) => {
+const LoginForm = ({logUser, showMessage}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -16,15 +15,11 @@ const LoginForm = ({setUser, setErrorMessage}) => {
                 'loggedNoteappUser', JSON.stringify(user)
             )
 
-            noteService.setToken(user.token)
-            setUser(user)
+            logUser(user)
             setUsername('')
             setPassword('')
-        } catch (exception) {
-            setErrorMessage('Wrong credentials')
-            setTimeout(() => {
-                setErrorMessage(null)
-            }, 5000)
+        } catch {
+            showMessage('Wrong credentials')
         }
     }
 

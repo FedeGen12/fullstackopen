@@ -53,6 +53,26 @@ const App = () => {
             })
     }
 
+    const addNote = (newNote) => {
+        noteService
+            .create(newNote)
+            .then(returnedNote => {
+                setNotes(notes.concat(returnedNote))
+            })
+    }
+
+    const logUser = (user) => {
+        noteService.setToken(user.token)
+        setUser(user)
+    }
+
+    const showErrorMessage = (message) => {
+        setErrorMessage(message)
+        setTimeout(() => {
+            setErrorMessage(null)
+        }, 5000)
+    }
+
     return (
         <div>
             <h1>Notes</h1>
@@ -61,17 +81,14 @@ const App = () => {
             {user === null ?
                 <Togglable buttonLabel='login'>
                     <LoginForm
-                        setUser={setUser}
-                        setErrorMessage={setErrorMessage}
+                        logUser={logUser}
+                        showMessage={showErrorMessage}
                     />
                 </Togglable> :
                 <div>
                     <p>{user.name} logged-in</p>
                     <Togglable buttonLabel="new note">
-                        <NoteForm
-                            notes={notes}
-                            setNotes={setNotes}
-                        />
+                        <NoteForm createNote={addNote} />
                     </Togglable>
                 </div>
             }
