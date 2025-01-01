@@ -4,13 +4,13 @@ import Notification from './components/Notification.jsx'
 import noteService from './services/notes.js'
 import LoginForm from "./components/LoginForm.jsx";
 import NoteForm from "./components/NoteForm.jsx";
+import Togglable from "./components/Togglable.jsx";
 
 const App = () => {
     const [notes, setNotes] = useState([])
     const [showAll, setShowAll] = useState(true)
     const [errorMessage, setErrorMessage] = useState(null)
     const [user, setUser] = useState(null)
-    const [loginVisible, setLoginVisible] = useState(false)
 
     useEffect(() => {
         noteService
@@ -53,36 +53,26 @@ const App = () => {
             })
     }
 
-    const loginForm = () => {
-        const hide = { display: loginVisible ? 'none' : '' }
-        const show = { display: loginVisible ? '' : 'none' }
-
-        return (
-            <div>
-                <div style={hide}>
-                    <button onClick={() => setLoginVisible(true)}>log in</button>
-                </div>
-                <div style={show}>
-                    <LoginForm
-                        setUser={setUser}
-                        setErrorMessage={setErrorMessage}
-                    />
-                    <button onClick={() => setLoginVisible(false)}>cancel</button>
-                </div>
-            </div>
-        )
-    }
-
     return (
         <div>
             <h1>Notes</h1>
             <Notification message={errorMessage} className='error'/>
 
             {user === null ?
-                loginForm() :
+                <Togglable buttonLabel='login'>
+                    <LoginForm
+                        setUser={setUser}
+                        setErrorMessage={setErrorMessage}
+                    />
+                </Togglable> :
                 <div>
                     <p>{user.name} logged-in</p>
-                    {<NoteForm notes={notes} setNotes={setNotes} />}
+                    <Togglable buttonLabel="new note">
+                        <NoteForm
+                            notes={notes}
+                            setNotes={setNotes}
+                        />
+                    </Togglable>
                 </div>
             }
 
