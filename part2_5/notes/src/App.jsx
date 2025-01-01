@@ -3,10 +3,10 @@ import Note from './components/Note'
 import Notification from './components/Notification.jsx'
 import noteService from './services/notes.js'
 import LoginForm from "./components/LoginForm.jsx";
+import NoteForm from "./components/NoteForm.jsx";
 
 const App = () => {
     const [notes, setNotes] = useState([])
-    const [newNote, setNewNote] = useState('')
     const [showAll, setShowAll] = useState(true)
     const [errorMessage, setErrorMessage] = useState(null)
 
@@ -26,25 +26,6 @@ const App = () => {
             noteService.setToken(user.token)
         }
     }, [])
-
-    const addNote = event => {
-        event.preventDefault()
-        const noteObject = {
-            content: newNote,
-            important: Math.random() < 0.5,
-        }
-
-        noteService
-            .create(noteObject)
-            .then(returnedNote => {
-                setNotes(notes.concat(returnedNote))
-                setNewNote('')
-            })
-    }
-
-    const handleNoteChange = (event) => {
-        setNewNote(event.target.value)
-    }
 
     const notesToShow = showAll
         ? notes
@@ -72,16 +53,6 @@ const App = () => {
 
     const [user, setUser] = useState(null)
 
-    const noteForm = () => (
-        <form onSubmit={addNote}>
-            <input
-                value={newNote}
-                onChange={handleNoteChange}
-            />
-            <button type="submit">save</button>
-        </form>
-    )
-
     return (
         <div>
             <h1>Notes</h1>
@@ -91,7 +62,7 @@ const App = () => {
                 <LoginForm setUser={setUser} setErrorMessage={setErrorMessage} /> :
                 <div>
                     <p>{user.name} logged-in</p>
-                    {noteForm()}
+                    {<NoteForm notes={notes} setNotes={setNotes} />}
                 </div>
             }
 
